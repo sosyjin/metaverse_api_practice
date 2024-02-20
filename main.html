@@ -4,79 +4,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>API 연습</title>
+  <title>도서/영화 검색</title>
 </head>
 
-<body>
-  <h1>책 검색</h1>
+<body style="text-align: center;">
+  <!-- TITLE -->
+  <h1>도서/영화 검색</h1>
+
+  <!-- BOOK/MOVIE INFO INPUT BOX -->
   <form class="book-info">
     <input id="title" type="text" placeholder="책 제목">
     <input type="submit" value="제출">
   </form>
+
+  <!-- BOOK/MOVIE INFO BOX -->
   <div class="show-up">
     <p id="title"></p>
     <p id="thumbnail"></p>
   </div>
+
+  <!-- OVERVIEW -->
   <span id="overview"></span>
 
+
+
+  <!-- ETC DEFINITION -->
   <script
   src="https://code.jquery.com/jquery-3.7.1.js"
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"
   ></script>
-
-  <script>
-    const form = document.querySelector(".book-info");
-    const input_title = document.querySelector(".book-info #title");
-  </script>
-
+  
   <!-- BOOK SEARCH -->
-  <script type="module">
-    import OpenAI from "https://cdn.skypack.dev/pin/openai@v4.28.0-EoCfwJScWhDgWiMG4UMv/mode=imports/optimized/openai.js"
-
-    // FORM SUBMIT EVENT
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      
-      $.ajax({ 
-        method: "GET",
-        url: "https://dapi.kakao.com/v3/search/book",
-        data: { query: input_title.value },
-        headers: { Authorization: "KakaoAK 67e0dcc912a54bc74ab96102b1c84261" }
-      }).done(function (msg) {
-        // SHOW UP BOOK'S TITLE, THUMBNAIL
-        $(".show-up #title").html("<strong>" + msg.documents[0].title + "</strong>");
-        $(".show-up #thumbnail").html("<img src='" + msg.documents[0].thumbnail + "'></img>");
-      });
-    })
-
-  </script>
+  <script src="./js/searchAPI.js" type="module"></script>
 
   <!-- TAKE AN OVERVIEW OF THE BOOK -->
-  <script type="module">
-    import OpenAI from "https://cdn.skypack.dev/pin/openai@v4.28.0-EoCfwJScWhDgWiMG4UMv/mode=imports/optimized/openai.js"
-
-    const openai = new OpenAI({
-      apiKey: "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",
-      dangerouslyAllowBrowser: true
-    });
-
-    // FORM SUBMIT EVENT
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const response = await openai.completions.create({
-        model: "gpt-3.5-turbo-instruct",
-        prompt: `Tell me overview of a book titled '${input_title.value}'.`,
-        temperature: 1,
-        max_tokens: 256,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-      });
-      $("#overview").html("<strong>" + response.choices[0].text + "</strong>");
-    })
-  </script>
+  <script src="./js/chatAPI.js" type="module"></script>
 </body>
 
 </html>
