@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>번역</title>
+</head>
+<body>
+  <input type="text" id="textToTranslate" placeholder="번역할 문장을 입력하세요.">
+  <button onclick="translate()">번역</button>
+  <div id="translationResult"></div>
+
+  <script>
+    async function translate() {
+      const text = document.getElementById('textToTranslate').value;
+      const sourceLang = 'ko';
+      const targetLang = 'en';
+
+      try {
+        const response = await fetch('/translate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ text, sourceLang, targetLang })
+        });
+        const translation = await response.json();
+        document.getElementById('translationResult').innerText = translation;
+      } catch (error) {
+        console.error('번역 에러:', error.message);
+      }
+    }
+  </script>
+</body>
+</html>
